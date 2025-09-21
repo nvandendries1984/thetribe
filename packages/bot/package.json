@@ -1,0 +1,22 @@
+{
+  "name": "the-tribe-bot",
+  "version": "1.0.0",
+  "description": "Multipurpose Discord bot core for The Tribe.",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
+    "lint": "eslint . --ext .js,.ts"
+  },
+  "dependencies": {
+    "discord.js": "^14.14.1",
+    "dotenv": "^16.4.5",
+    "mongoose": "^8.18.1"
+  },
+  "devDependencies": {
+    "eslint": "^8.56.0",
+    "nodemon": "^3.1.0",
+    "prettier": "^3.2.5"
+  }
+}
