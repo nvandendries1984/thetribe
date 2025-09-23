@@ -1,7 +1,37 @@
-dist/
-build/
+# Node
+node_modules/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Env
 .env
 .env.*
+config/*.env
+
+# Build
+/dist/
+/build/
+
+# VSCode
+.vscode/
+
+# OS
 .DS_Store
+Thumbs.db
+
+# Docker
+mongo_data/
+
+# Test
+coverage/
+
+# Lock files
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+
+# Misc
 *.log
-node_modules/

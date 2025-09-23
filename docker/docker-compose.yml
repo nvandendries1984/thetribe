@@ -1,0 +1,46 @@
+version: '3.8'
+services:
+  mongo:
+    image: mongo:6
+    restart: always
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: Pasja@2025
+    volumes:
+      - mongo_data:/data/db
+  server:
+    build: ../server
+    command: npm run dev
+    environment:
+      - NODE_ENV=development
+      - DB_HOST=mongo
+      - DB_USER=root
+      - DB_PASS=Pasja@2025
+      - DB_NAME=thetribe
+      - DB_AUTH=admin
+      - JWT_SECRET=replace_me_securely
+      - DISCORD_TOKEN=replace_with_real_token
+      - OAUTH_CLIENT_ID=replace
+      - OAUTH_CLIENT_SECRET=replace
+      - OAUTH_REDIRECT_URI=http://localhost:3000/auth/discord/callback
+    ports:
+      - 3000:3000
+    depends_on:
+      - mongo
+    volumes:
+      - ../server:/usr/src/app
+  client:
+    build: ../client
+    command: npm run dev
+    environment:
+      - REACT_APP_API_URL=http://localhost:3000/api
+    ports:
+      - 5173:5173
+    depends_on:
+      - server
+    volumes:
+      - ../client:/usr/src/app
+volumes:
+  mongo_data:
