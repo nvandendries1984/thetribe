@@ -17,6 +17,7 @@ config/*.env
 
 # VSCode
 .vscode/
+.github/
 
 # OS
 .DS_Store
@@ -24,6 +25,7 @@ Thumbs.db
 
 # Docker
 mongo_data/
+docker-compose.yml
 
 # Test
 coverage/
