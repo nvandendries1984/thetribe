@@ -42,7 +42,12 @@ export class TheTribeBot {
       Logger.info(`Bot is ready! Logged in as ${readyClient.user.tag}`);
       Logger.info(`Serving ${this.client.guilds.cache.size} guilds`);
 
-      await this.database.connect();
+      try {
+        await this.database.connect(5, 3000); // 5 attempts, 3 seconds apart
+      } catch (error) {
+        Logger.error('Failed to connect to database after multiple attempts, continuing without database:', error);
+      }
+
       await this.moduleManager.loadModules();
       await this.commandManager.registerCommands();
     });

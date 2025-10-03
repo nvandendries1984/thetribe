@@ -75,6 +75,14 @@ export const serverInfoCommand: Command = {
 export const userInfoCommand: Command = {
   name: 'userinfo',
   description: 'Shows information about a user',
+  options: [
+    {
+      name: 'user',
+      description: 'The user to get information about',
+      type: 6, // USER
+      required: false,
+    },
+  ],
   async execute(interaction: ChatInputCommandInteraction) {
     const user = interaction.options.getUser('user') || interaction.user;
     const member = interaction.guild?.members.cache.get(user.id);

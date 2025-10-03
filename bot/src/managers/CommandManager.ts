@@ -33,6 +33,62 @@ export class CommandManager {
         .setName(command.name)
         .setDescription(command.description);
 
+      // Add options if they exist
+      if (command.options) {
+        for (const option of command.options) {
+          switch (option.type) {
+            case 6: // USER
+              slashCommand.addUserOption(opt => {
+                opt.setName(option.name).setDescription(option.description);
+                if (option.required) opt.setRequired(true);
+                return opt;
+              });
+              break;
+            case 3: // STRING
+              slashCommand.addStringOption(opt => {
+                opt.setName(option.name).setDescription(option.description);
+                if (option.required) opt.setRequired(true);
+                if (option.choices) {
+                  opt.addChoices(...option.choices.map(c => ({ name: c.name, value: c.value as string })));
+                }
+                return opt;
+              });
+              break;
+            case 4: // INTEGER
+              slashCommand.addIntegerOption(opt => {
+                opt.setName(option.name).setDescription(option.description);
+                if (option.required) opt.setRequired(true);
+                if (option.choices) {
+                  opt.addChoices(...option.choices.map(c => ({ name: c.name, value: c.value as number })));
+                }
+                return opt;
+              });
+              break;
+            case 5: // BOOLEAN
+              slashCommand.addBooleanOption(opt => {
+                opt.setName(option.name).setDescription(option.description);
+                if (option.required) opt.setRequired(true);
+                return opt;
+              });
+              break;
+            case 7: // CHANNEL
+              slashCommand.addChannelOption(opt => {
+                opt.setName(option.name).setDescription(option.description);
+                if (option.required) opt.setRequired(true);
+                return opt;
+              });
+              break;
+            case 8: // ROLE
+              slashCommand.addRoleOption(opt => {
+                opt.setName(option.name).setDescription(option.description);
+                if (option.required) opt.setRequired(true);
+                return opt;
+              });
+              break;
+          }
+        }
+      }
+
       return slashCommand.toJSON();
     });
 

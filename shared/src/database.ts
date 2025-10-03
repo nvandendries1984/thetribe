@@ -7,16 +7,29 @@ export class DatabaseManager {
 
   constructor(private connectionString: string, private dbName: string) {}
 
-  async connect(): Promise<void> {
-    try {
-      this.client = new MongoClient(this.connectionString);
-      await this.client.connect();
-      this.db = this.client.db(this.dbName);
-      console.log('Connected to MongoDB successfully');
-    } catch (error) {
-      console.error('Failed to connect to MongoDB:', error);
-      throw error;
+  async connect(maxRetries: number = 5, retryDelay: number = 5000): Promise<void> {
+    let lastError: Error | null = null;
+
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+      try {
+        this.client = new MongoClient(this.connectionString);
+        await this.client.connect();
+        this.db = this.client.db(this.dbName);
+        console.log('Connected to MongoDB successfully');
+        return;
+      } catch (error) {
+        lastError = error as Error;
+        console.error(`MongoDB connection attempt ${attempt}/${maxRetries} failed:`, error);
+
+        if (attempt < maxRetries) {
+          console.log(`Retrying in ${retryDelay / 1000} seconds...`);
+          await new Promise(resolve => setTimeout(resolve, retryDelay));
+        }
+      }
     }
+
+    console.error('Failed to connect to MongoDB after', maxRetries, 'attempts');
+    throw lastError;
   }
 
   async disconnect(): Promise<void> {

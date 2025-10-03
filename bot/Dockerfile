@@ -16,6 +16,14 @@ COPY bot/src/ ./bot/src/
 COPY bot/tsconfig.json ./bot/
 RUN cd bot && npm run build
 
+# Copy and build modules
+COPY modules/ ./modules/
+RUN for module in modules/*/; do \
+  if [ -f "$module/package.json" ]; then \
+    cd "$module" && npm install && npm run build && cd /app; \
+  fi; \
+done
+
 # Create logs directory
 RUN mkdir -p logs
 
