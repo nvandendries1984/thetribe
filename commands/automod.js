@@ -70,7 +70,7 @@ module.exports = {
                     {
                         type: AutoModerationActionType.BlockMessage,
                         metadata: {
-                            customMessage: 'Dit bericht is geblokkeerd door AutoMod.'
+                            customMessage: 'This message was blocked by AutoMod.'
                         }
                     },
                     {
@@ -89,7 +89,7 @@ module.exports = {
 
                 case 'keyword':
                     if (!keywords) {
-                        return interaction.editReply('❌ Trefwoorden zijn vereist voor keyword regels!');
+                        return interaction.editReply('❌ Keywords are required for keyword rules!');
                     }
                     ruleData.triggerType = AutoModerationRuleTriggerType.Keyword;
                     ruleData.triggerMetadata = {
@@ -109,24 +109,24 @@ module.exports = {
 
             const embed = new EmbedBuilder()
                 .setColor('#00FF00')
-                .setTitle('✅ AutoMod Regel Aangemaakt')
-                .setDescription(`AutoMod regel **${rule.name}** is succesvol aangemaakt!`)
+                .setTitle('✅ AutoMod Rule Created')
+                .setDescription(`AutoMod rule **${rule.name}** has been successfully created!`)
                 .addFields(
-                    { name: 'Regel ID', value: rule.id, inline: true },
+                    { name: 'Rule ID', value: rule.id, inline: true },
                     { name: 'Type', value: type, inline: true },
-                    { name: 'Status', value: rule.enabled ? 'Ingeschakeld' : 'Uitgeschakeld', inline: true }
+                    { name: 'Status', value: rule.enabled ? 'Enabled' : 'Disabled', inline: true }
                 )
                 .setTimestamp();
 
             if (type === 'keyword' && keywords) {
-                embed.addFields({ name: 'Trefwoorden', value: keywords, inline: false });
+                embed.addFields({ name: 'Keywords', value: keywords, inline: false });
             }
 
             await interaction.editReply({ embeds: [embed] });
 
         } catch (error) {
             console.error('Error creating automod rule:', error);
-            await interaction.editReply('❌ Er is een fout opgetreden bij het aanmaken van de AutoMod regel.');
+            await interaction.editReply('❌ An error occurred while creating the AutoMod rule.');
         }
     },
 
@@ -137,17 +137,17 @@ module.exports = {
             const rules = await interaction.guild.autoModerationRules.fetch();
 
             if (rules.size === 0) {
-                return interaction.editReply('📝 Er zijn geen AutoMod regels ingesteld.');
+                return interaction.editReply('📝 No AutoMod rules are currently set up.');
             }
 
             const embed = new EmbedBuilder()
                 .setColor('#0099FF')
-                .setTitle('📋 AutoMod Regels')
-                .setDescription(`Er zijn **${rules.size}** AutoMod regels ingesteld:`)
+                .setTitle('📋 AutoMod Rules')
+                .setDescription(`There are **${rules.size}** AutoMod rules set up:`)
                 .setTimestamp();
 
             rules.forEach(rule => {
-                const status = rule.enabled ? '✅ Ingeschakeld' : '❌ Uitgeschakeld';
+                const status = rule.enabled ? '✅ Enabled' : '❌ Disabled';
                 const triggerType = this.getTriggerTypeName(rule.triggerType);
 
                 embed.addFields({
@@ -161,7 +161,7 @@ module.exports = {
 
         } catch (error) {
             console.error('Error listing automod rules:', error);
-            await interaction.editReply('❌ Er is een fout opgetreden bij het ophalen van AutoMod regels.');
+            await interaction.editReply('❌ An error occurred while fetching AutoMod rules.');
         }
     },
 
@@ -174,17 +174,17 @@ module.exports = {
             const rule = await interaction.guild.autoModerationRules.fetch(ruleId);
 
             if (!rule) {
-                return interaction.editReply('❌ AutoMod regel niet gevonden!');
+                return interaction.editReply('❌ AutoMod rule not found!');
             }
 
             await rule.delete();
 
             const embed = new EmbedBuilder()
                 .setColor('#FF0000')
-                .setTitle('🗑️ AutoMod Regel Verwijderd')
-                .setDescription(`AutoMod regel **${rule.name}** is succesvol verwijderd!`)
+                .setTitle('🗑️ AutoMod Rule Deleted')
+                .setDescription(`AutoMod rule **${rule.name}** has been successfully deleted!`)
                 .addFields(
-                    { name: 'Regel ID', value: ruleId, inline: true }
+                    { name: 'Rule ID', value: ruleId, inline: true }
                 )
                 .setTimestamp();
 
@@ -192,22 +192,22 @@ module.exports = {
 
         } catch (error) {
             console.error('Error deleting automod rule:', error);
-            await interaction.editReply('❌ Er is een fout opgetreden bij het verwijderen van de AutoMod regel.');
+            await interaction.editReply('❌ An error occurred while deleting the AutoMod rule.');
         }
     },
 
     getTriggerTypeName(triggerType) {
         switch (triggerType) {
             case AutoModerationRuleTriggerType.Keyword:
-                return 'Trefwoorden';
+                return 'Keywords';
             case AutoModerationRuleTriggerType.Spam:
                 return 'Spam';
             case AutoModerationRuleTriggerType.KeywordPreset:
-                return 'Voorinstelling';
+                return 'Preset';
             case AutoModerationRuleTriggerType.MentionSpam:
                 return 'Mention Spam';
             default:
-                return 'Onbekend';
+                return 'Unknown';
         }
     }
 };

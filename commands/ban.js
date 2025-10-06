@@ -54,7 +54,7 @@ module.exports = {
             const existingBan = await interaction.guild.bans.fetch(target.id).catch(() => null);
             if (existingBan) {
                 return interaction.reply({
-                    content: '❌ Deze gebruiker is al geband!',
+                    content: '❌ This user is already banned!',
                     ephemeral: true
                 });
             }
@@ -64,10 +64,10 @@ module.exports = {
                 try {
                     const dmEmbed = new EmbedBuilder()
                         .setColor('#FF0000')
-                        .setTitle('🔨 Je bent geband')
-                        .setDescription(`Je bent geband van **${interaction.guild.name}**`)
+                        .setTitle('🔨 You have been banned')
+                        .setDescription(`You have been banned from **${interaction.guild.name}**`)
                         .addFields(
-                            { name: 'Reden', value: reason, inline: true },
+                            { name: 'Reason', value: reason, inline: true },
                             { name: 'Moderator', value: interaction.user.tag, inline: true }
                         )
                         .setTimestamp();
@@ -86,13 +86,13 @@ module.exports = {
 
             const embed = new EmbedBuilder()
                 .setColor('#FF0000')
-                .setTitle('🔨 Gebruiker Geband')
-                .setDescription(`**${target.tag}** is geband van de server`)
+                .setTitle('🔨 User Banned')
+                .setDescription(`**${target.tag}** has been banned from the server`)
                 .addFields(
-                    { name: 'Gebruiker', value: `${target.tag} (${target.id})`, inline: true },
+                    { name: 'User', value: `${target.tag} (${target.id})`, inline: true },
                     { name: 'Moderator', value: interaction.user.tag, inline: true },
-                    { name: 'Reden', value: reason, inline: false },
-                    { name: 'Berichten verwijderd', value: `${deleteDays} dagen`, inline: true }
+                    { name: 'Reason', value: reason, inline: false },
+                    { name: 'Messages deleted', value: `${deleteDays} days`, inline: true }
                 )
                 .setTimestamp();
 
@@ -101,7 +101,7 @@ module.exports = {
         } catch (error) {
             console.error('Error banning user:', error);
             await interaction.reply({
-                content: '❌ Er is een fout opgetreden bij het bannen van de gebruiker.',
+                content: '❌ An error occurred while banning the user.',
                 ephemeral: true
             });
         }

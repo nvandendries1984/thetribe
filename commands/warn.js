@@ -67,12 +67,12 @@ module.exports = {
             try {
                 const dmEmbed = new EmbedBuilder()
                     .setColor('#FFFF00')
-                    .setTitle('⚠️ Je hebt een waarschuwing gekregen')
-                    .setDescription(`Je hebt een waarschuwing gekregen in **${interaction.guild.name}**`)
+                    .setTitle('⚠️ You have received a warning')
+                    .setDescription(`You have received a warning in **${interaction.guild.name}**`)
                     .addFields(
-                        { name: 'Reden', value: reason, inline: false },
+                        { name: 'Reason', value: reason, inline: false },
                         { name: 'Moderator', value: interaction.user.tag, inline: true },
-                        { name: 'Totaal waarschuwingen', value: `${totalWarnings}`, inline: true }
+                        { name: 'Total warnings', value: `${totalWarnings}`, inline: true }
                     )
                     .setTimestamp();
 
@@ -83,13 +83,13 @@ module.exports = {
 
             const embed = new EmbedBuilder()
                 .setColor('#FFFF00')
-                .setTitle('⚠️ Gebruiker Gewaarschuwd')
-                .setDescription(`**${target.tag}** heeft een waarschuwing gekregen`)
+                .setTitle('⚠️ User Warned')
+                .setDescription(`**${target.tag}** has received a warning`)
                 .addFields(
-                    { name: 'Gebruiker', value: `${target.tag} (${target.id})`, inline: true },
+                    { name: 'User', value: `${target.tag} (${target.id})`, inline: true },
                     { name: 'Moderator', value: interaction.user.tag, inline: true },
-                    { name: 'Totaal waarschuwingen', value: `${totalWarnings}`, inline: true },
-                    { name: 'Reden', value: reason, inline: false }
+                    { name: 'Total warnings', value: `${totalWarnings}`, inline: true },
+                    { name: 'Reason', value: reason, inline: false }
                 )
                 .setTimestamp();
 
@@ -98,7 +98,7 @@ module.exports = {
         } catch (error) {
             console.error('Error warning user:', error);
             await interaction.reply({
-                content: '❌ Er is een fout opgetreden bij het geven van een waarschuwing.',
+                content: '❌ An error occurred while warning the user.',
                 ephemeral: true
             });
         }

@@ -23,34 +23,34 @@ module.exports = {
     async execute(interaction) {
         const target = interaction.options.getUser('target');
         const duration = interaction.options.getInteger('duration');
-        const reason = interaction.options.getString('reason') || 'Geen reden opgegeven';
+        const reason = interaction.options.getString('reason') || 'No reason provided';
 
         const member = await interaction.guild.members.fetch(target.id);
 
         if (!member) {
             return interaction.reply({
-                content: '❌ Gebruiker niet gevonden in deze server!',
+                content: '❌ User not found in this server!',
                 ephemeral: true
             });
         }
 
         if (!member.moderatable) {
             return interaction.reply({
-                content: '❌ Ik kan deze gebruiker geen timeout geven. Controleer mijn permissies en rol hiërarchie.',
+                content: '❌ I cannot timeout this user. Check my permissions and role hierarchy.',
                 ephemeral: true
             });
         }
 
         if (member.id === interaction.user.id) {
             return interaction.reply({
-                content: '❌ Je kunt jezelf geen timeout geven!',
+                content: '❌ You cannot timeout yourself!',
                 ephemeral: true
             });
         }
 
         if (member.id === interaction.client.user.id) {
             return interaction.reply({
-                content: '❌ Ik kan mezelf geen timeout geven!',
+                content: '❌ I cannot timeout myself!',
                 ephemeral: true
             });
         }
@@ -65,12 +65,12 @@ module.exports = {
             try {
                 const dmEmbed = new EmbedBuilder()
                     .setColor('#FF9900')
-                    .setTitle('⏰ Je hebt een timeout gekregen')
-                    .setDescription(`Je hebt een timeout gekregen in **${interaction.guild.name}**`)
+                    .setTitle('⏰ You have been timed out')
+                    .setDescription(`You have been timed out in **${interaction.guild.name}**`)
                     .addFields(
-                        { name: 'Duur', value: `${duration} minuten`, inline: true },
-                        { name: 'Tot', value: `<t:${Math.floor(timeoutUntil.getTime() / 1000)}:F>`, inline: true },
-                        { name: 'Reden', value: reason, inline: false },
+                        { name: 'Duration', value: `${duration} minutes`, inline: true },
+                        { name: 'Until', value: `<t:${Math.floor(timeoutUntil.getTime() / 1000)}:F>`, inline: true },
+                        { name: 'Reason', value: reason, inline: false },
                         { name: 'Moderator', value: interaction.user.tag, inline: true }
                     )
                     .setTimestamp();
@@ -82,14 +82,14 @@ module.exports = {
 
             const embed = new EmbedBuilder()
                 .setColor('#FF9900')
-                .setTitle('⏰ Gebruiker Timeout')
-                .setDescription(`**${target.tag}** heeft een timeout gekregen`)
+                .setTitle('⏰ User Timeout')
+                .setDescription(`**${target.tag}** has been timed out`)
                 .addFields(
-                    { name: 'Gebruiker', value: `${target.tag} (${target.id})`, inline: true },
+                    { name: 'User', value: `${target.tag} (${target.id})`, inline: true },
                     { name: 'Moderator', value: interaction.user.tag, inline: true },
-                    { name: 'Duur', value: `${duration} minuten`, inline: true },
-                    { name: 'Tot', value: `<t:${Math.floor(timeoutUntil.getTime() / 1000)}:F>`, inline: true },
-                    { name: 'Reden', value: reason, inline: false }
+                    { name: 'Duration', value: `${duration} minutes`, inline: true },
+                    { name: 'Until', value: `<t:${Math.floor(timeoutUntil.getTime() / 1000)}:F>`, inline: true },
+                    { name: 'Reason', value: reason, inline: false }
                 )
                 .setTimestamp();
 
@@ -98,7 +98,7 @@ module.exports = {
         } catch (error) {
             console.error('Error timing out user:', error);
             await interaction.reply({
-                content: '❌ Er is een fout opgetreden bij het geven van een timeout aan de gebruiker.',
+                content: '❌ An error occurred while timing out the user.',
                 ephemeral: true
             });
         }
