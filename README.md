@@ -173,6 +173,47 @@ The bot supports Discord's native AutoMod functionality:
 
 Use `/automod create` to create new rules.
 
+## 🌐 Web Dashboard
+
+The bot includes a built-in web dashboard for monitoring bot status, server statistics, and system health. The dashboard works independently of VS Code or development tools.
+
+### Access URLs
+
+**Local access (same machine):**
+```
+http://localhost:15015
+```
+
+**Remote access (other devices on network):**
+```
+http://YOUR_SERVER_IP:15015
+```
+
+**For your server specifically:**
+```
+http://188.212.125.248:15015
+```
+
+### Features
+
+- 📊 **Real-time Bot Status**: Online/offline status, server count, user count, ping
+- 💾 **System Monitoring**: Uptime, memory usage, CPU information
+- 🗄️ **Database Status**: MongoDB connection status and health
+- 🔄 **Auto-refresh**: Updates every 30 seconds automatically
+- 📱 **Mobile Responsive**: Works on all devices
+- ❌ **Error Handling**: Shows connection issues with helpful troubleshooting
+
+### API Endpoint
+
+The dashboard consumes data from the health endpoint:
+```
+GET http://localhost:15015/health
+```
+
+Returns JSON with complete bot status, system info, and database state.
+
+**Important:** The bot container must be running for the dashboard to work. The dashboard will show connection information if there are any issues accessing the bot.
+
 ## Database Schema
 
 ### ModerationLog

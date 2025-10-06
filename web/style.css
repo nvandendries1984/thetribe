@@ -340,3 +340,41 @@ footer a:hover {
         align-self: flex-end;
     }
 }
+
+/* Connection Info Styles */
+.connection-info {
+    background: #2a2a2a;
+    border: 1px solid #444;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #ff6b35;
+}
+
+.connection-info h3 {
+    color: #ff6b35;
+    margin-bottom: 15px;
+    font-size: 1.2rem;
+}
+
+.connection-info p {
+    margin-bottom: 10px;
+    color: #cccccc;
+}
+
+.connection-info ul {
+    margin: 15px 0 15px 20px;
+    color: #cccccc;
+}
+
+.connection-info li {
+    margin-bottom: 8px;
+}
+
+.connection-info code {
+    background: #333;
+    color: #4CAF50;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+}

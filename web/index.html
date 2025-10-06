@@ -125,6 +125,18 @@
             </div>
         </div>
 
+        <!-- Connection Info (only shown when there are connection issues) -->
+        <div id="connectionInfo" class="connection-info" style="display: none;">
+            <h3><i class="fas fa-info-circle"></i> Connection Information</h3>
+            <p>If you're seeing connection errors, make sure you're accessing the dashboard from the correct URL:</p>
+            <ul>
+                <li><strong>Local:</strong> <code>http://localhost:15015</code></li>
+                <li><strong>Server IP:</strong> <code>http://YOUR_SERVER_IP:15015</code></li>
+                <li><strong>Domain:</strong> <code>http://your-domain.com:15015</code></li>
+            </ul>
+            <p>The bot container must be running for this dashboard to work.</p>
+        </div>
+
         <footer>
             <p>© 2025 TheTribe Discord Bot | <a href="https://github.com/nvandendries1984/thetribe" target="_blank">GitHub</a></p>
             <p class="auto-refresh">Auto-refreshing every 30 seconds</p>

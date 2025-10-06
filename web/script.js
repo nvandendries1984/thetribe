@@ -1,6 +1,7 @@
 class BotDashboard {
     constructor() {
-        this.healthEndpoint = 'http://localhost:15015/health';
+        // Use relative path for health endpoint to work from any domain
+        this.healthEndpoint = '/health';
         this.refreshInterval = 30000; // 30 seconds
         this.isLoading = false;
 
@@ -133,12 +134,24 @@ class BotDashboard {
             <br><small>The dashboard will continue trying to reconnect automatically.</small>
         `;
         errorElement.style.display = 'block';
+
+        // Show connection info
+        const connectionInfo = document.getElementById('connectionInfo');
+        if (connectionInfo) {
+            connectionInfo.style.display = 'block';
+        }
     }
 
     hideErrorMessage() {
         const errorElement = document.querySelector('.error-message');
         if (errorElement) {
             errorElement.style.display = 'none';
+        }
+
+        // Hide connection info when connection is restored
+        const connectionInfo = document.getElementById('connectionInfo');
+        if (connectionInfo) {
+            connectionInfo.style.display = 'none';
         }
     }
 

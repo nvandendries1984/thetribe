@@ -13,11 +13,28 @@ A simple web interface to monitor the status of The Tribe Discord bot without re
 
 ## Accessing the Dashboard
 
-The web dashboard is automatically served by the bot's health check server:
+The web dashboard is automatically served by the bot's health check server and can be accessed via multiple URLs:
 
+**Local access (same machine):**
 ```
 http://localhost:15015
 ```
+
+**Remote access (from other devices):**
+```
+http://YOUR_SERVER_IP:15015
+```
+
+**Domain access (if configured):**
+```
+http://your-domain.com:15015
+```
+
+**Important Notes:**
+- The bot container must be running for the dashboard to work
+- Port 15015 must be accessible from your network
+- The dashboard works independently of VS Code or other development tools
+- Data is fetched directly from the bot's internal health endpoint
 
 ## Files
 
