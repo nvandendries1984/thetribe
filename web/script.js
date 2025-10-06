@@ -1,17 +1,49 @@
 class BotDashboard {
     constructor() {
-        // Use relative path for health endpoint to work from any domain
-        this.healthEndpoint = '/health';
+        // Automatically detect the correct health endpoint based on current location
+        this.healthEndpoint = this.getHealthEndpoint();
         this.refreshInterval = 30000; // 30 seconds
         this.isLoading = false;
 
         this.init();
     }
 
+    getHealthEndpoint() {
+        // If we're on the same host/port, use relative path
+        // Otherwise construct the full URL
+        const currentHost = window.location.hostname;
+        const currentPort = window.location.port;
+        const currentProtocol = window.location.protocol;
+
+        // If accessing via the bot's port (15015), use relative path
+        if (currentPort === '15015') {
+            return '/health';
+        }
+
+        // Otherwise, construct full URL to the bot's health endpoint
+        // Use the same protocol as the current page
+        return `${currentProtocol}//${currentHost}:15015/health`;
+    }
+
     init() {
+        this.updateConnectionInfo();
         this.loadData();
         this.setupAutoRefresh();
         this.setupErrorHandling();
+    }
+
+    updateConnectionInfo() {
+        // Update connection info with current URLs
+        const currentUrlElement = document.getElementById('currentUrl');
+        const healthEndpointElement = document.getElementById('healthEndpointUrl');
+
+        if (currentUrlElement) {
+            currentUrlElement.textContent = window.location.href;
+        }
+
+        if (healthEndpointElement) {
+            healthEndpointElement.textContent = this.healthEndpoint;
+        }
     }
 
     async loadData() {
@@ -21,10 +53,31 @@ class BotDashboard {
         this.showLoadingState();
 
         try {
-            const response = await fetch(this.healthEndpoint);
+            let response;
+            let lastError;
 
-            if (!response.ok) {
-                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            // Try primary endpoint first
+            try {
+                response = await fetch(this.healthEndpoint);
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+            } catch (primaryError) {
+                lastError = primaryError;
+                console.warn('Primary endpoint failed, trying fallback:', primaryError.message);
+
+                // Try fallback with direct server IP
+                const fallbackEndpoint = 'http://188.212.125.248:15015/health';
+                try {
+                    response = await fetch(fallbackEndpoint);
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                    }
+                    console.log('Fallback endpoint succeeded');
+                } catch (fallbackError) {
+                    console.error('Fallback endpoint also failed:', fallbackError.message);
+                    throw lastError; // Throw the original error
+                }
             }
 
             const data = await response.json();

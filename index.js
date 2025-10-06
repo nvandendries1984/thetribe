@@ -162,6 +162,8 @@ function createHealthCheckServer() {
 
             if (req.url === '/' || req.url === '/index.html') {
                 filePath = path.join(webPath, 'index.html');
+            } else if (req.url === '/access' || req.url === '/access.html') {
+                filePath = path.join(webPath, 'access.html');
             } else if (req.url === '/api-docs' || req.url === '/api-docs.html') {
                 filePath = path.join(webPath, 'api-docs.html');
             } else if (req.url === '/style.css') {

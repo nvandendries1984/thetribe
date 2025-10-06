@@ -194,6 +194,11 @@ http://YOUR_SERVER_IP:15015
 http://188.212.125.248:15015
 ```
 
+**Access Instructions Page:**
+```
+http://188.212.125.248:15015/access
+```
+
 ### Features
 
 - 📊 **Real-time Bot Status**: Online/offline status, server count, user count, ping

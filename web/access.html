@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TheTribe Bot - Access Instructions</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #1a1a1a;
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            background: #2a2a2a;
+            border-radius: 12px;
+            padding: 40px;
+            text-align: center;
+            border: 1px solid #444;
+        }
+        h1 {
+            color: #4CAF50;
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+        }
+        .access-links {
+            margin: 30px 0;
+        }
+        .access-link {
+            display: block;
+            background: #333;
+            color: #4CAF50;
+            text-decoration: none;
+            padding: 15px 20px;
+            margin: 10px 0;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            border: 1px solid #555;
+        }
+        .access-link:hover {
+            background: #4CAF50;
+            color: #fff;
+            transform: translateY(-2px);
+        }
+        .info {
+            background: #333;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #ff6b35;
+        }
+        .status {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+            padding: 15px;
+            background: #333;
+            border-radius: 8px;
+        }
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #4CAF50;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🤖 TheTribe Bot Dashboard</h1>
+
+        <div class="status">
+            <div class="status-dot"></div>
+            <span>Bot Server is Running</span>
+        </div>
+
+        <p>To access the TheTribe Discord Bot dashboard, use one of these direct links:</p>
+
+        <div class="access-links">
+            <a href="http://188.212.125.248:15015" class="access-link" target="_blank">
+                📊 Main Dashboard - http://188.212.125.248:15015
+            </a>
+
+            <a href="http://188.212.125.248:15016/docs" class="access-link" target="_blank">
+                📚 API Documentation - http://188.212.125.248:15016/docs
+            </a>
+
+            <a href="http://188.212.125.248:15015/health" class="access-link" target="_blank">
+                ❤️ Health Check - http://188.212.125.248:15015/health
+            </a>
+        </div>
+
+        <div class="info">
+            <h3>📋 Access Information</h3>
+            <p><strong>Server IP:</strong> 188.212.125.248</p>
+            <p><strong>Dashboard Port:</strong> 15015</p>
+            <p><strong>API Port:</strong> 15016</p>
+            <p><strong>Status:</strong> The bot is running in a Docker container and accessible from any device on the network.</p>
+        </div>
+
+        <div class="info">
+            <h3>🔧 Troubleshooting</h3>
+            <ul style="text-align: left;">
+                <li>Make sure you're using the full URL including the port number</li>
+                <li>Check that ports 15015 and 15016 are not blocked by your firewall</li>
+                <li>If you still can't access it, the bot container might not be running</li>
+                <li>Contact your system administrator if you're on a corporate network</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Auto-redirect to main dashboard after 5 seconds
+        setTimeout(() => {
+            window.location.href = 'http://188.212.125.248:15015';
+        }, 10000);
+
+        // Add countdown
+        let countdown = 10;
+        const countdownInterval = setInterval(() => {
+            countdown--;
+            if (countdown <= 0) {
+                clearInterval(countdownInterval);
+            }
+        }, 1000);
+    </script>
+</body>
+</html>
