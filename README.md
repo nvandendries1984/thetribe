@@ -9,8 +9,11 @@ A powerful multi-guild Discord bot with slash commands, automod functionality, a
 - `/help` - Shows all available commands
 - `/info` - Shows information about bot, server, or user
 
-### 🛡️ Moderation Commands
-- `/kick` - Kick a user from the server
+### 🛡️ Moderation Comma**Test MongoDB connection:**
+```bash
+# Test connection to your external MongoDB
+mongosh "your_mongodb_connection_string"
+```- `/kick` - Kick a user from the server
 - `/ban` - Ban a user from the server
 - `/timeout` - Give a user a timeout
 - `/warn` - Give a user a warning
@@ -290,6 +293,32 @@ GET http://localhost:15015/health
 **Portainer Integration:**
 The health check is compatible with Portainer's container monitoring. Configure your Portainer stack to use the health endpoint for automatic monitoring.
 
+### Troubleshooting Common Issues
+
+**MongoDB Connection Timeout:**
+```
+PoolClearedOnNetworkError: Connection to mongodb:27017 interrupted
+```
+- Solution: Make sure your external MongoDB server is running and accessible
+- Check your MONGODB_URI in the .env file
+- Verify network connectivity to your MongoDB server
+- Check MongoDB server logs for connection issues
+
+**Discord "Unknown interaction" Error:**
+```
+DiscordAPIError[10062]: Unknown interaction
+```
+- Solution: This happens when responses take too long (>3 seconds)
+- The bot now uses `deferReply()` for database operations
+- Check that MongoDB is responding quickly
+
+**Deprecated "ephemeral" Warning:**
+```
+Warning: Supplying "ephemeral" for interaction response options is deprecated
+```
+- Solution: Updated all commands to use `flags: 64` instead of `ephemeral: true`
+- This is compatible with Discord.js v14+
+
 ### Troubleshooting Docker
 
 **Check container status:**
@@ -318,9 +347,9 @@ docker-compose build discord-bot
 docker-compose up -d discord-bot
 ```
 
-**Access MongoDB shell:**
+**Access your MongoDB shell:**
 ```bash
-docker-compose exec mongodb mongosh -u root -p Pasja@2025
+mongosh "your_mongodb_connection_string"
 ```
 
 ## Support

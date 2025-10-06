@@ -15,11 +15,12 @@ module.exports = {
             .setThumbnail(interaction.client.user.displayAvatarURL())
             .setTimestamp();
 
-        // General commands
+        // Command categories
         const generalCommands = [];
         const moderationCommands = [];
         const automodCommands = [];
         const aiCommands = [];
+        const systemCommands = [];
 
         commands.forEach(command => {
             const commandName = `\`/${command.data.name}\``;
@@ -34,6 +35,8 @@ module.exports = {
                 automodCommands.push(`${commandName} - ${commandDesc}`);
             } else if (command.data.name.includes('ai')) {
                 aiCommands.push(`${commandName} - ${commandDesc}`);
+            } else if (command.data.name.includes('botinfo') || command.data.name.includes('systeminfo')) {
+                systemCommands.push(`${commandName} - ${commandDesc}`);
             } else {
                 generalCommands.push(`${commandName} - ${commandDesc}`);
             }
@@ -71,9 +74,17 @@ module.exports = {
             });
         }
 
+        if (systemCommands.length > 0) {
+            embed.addFields({
+                name: '📊 System & Info Commands',
+                value: systemCommands.join('\n'),
+                inline: false
+            });
+        }
+
         embed.addFields(
             { name: '💡 AI Assistant', value: 'You can also mention me (@TheTribe) with a question to get an AI response!', inline: false },
-            { name: 'ℹ️ More info?', value: 'Use `/info bot` for more information about the bot.', inline: false }
+            { name: 'ℹ️ Bot Details', value: 'Use `/botinfo` for detailed bot information or `/info bot` for basic info.', inline: false }
         );
 
         await interaction.reply({ embeds: [embed] });

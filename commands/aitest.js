@@ -10,7 +10,7 @@ module.exports = {
 
     async execute(interaction) {
         try {
-            await interaction.deferReply({ ephemeral: true });
+            await interaction.deferReply({ flags: 64 });
 
             // Get OpenAI instance
             const OpenAI = require('openai');

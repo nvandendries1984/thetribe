@@ -68,14 +68,50 @@ async function deployCommands() {
     }
 }
 
-// MongoDB connection
+// MongoDB connection with retry logic
 async function connectToDatabase() {
-    try {
-        await mongoose.connect(process.env.MONGODB_URI);
-        console.log('✅ Connected to MongoDB');
-    } catch (error) {
-        console.error('❌ MongoDB connection error:', error);
-        process.exit(1);
+    const maxRetries = 5;
+    let retries = 0;
+
+    while (retries < maxRetries) {
+        try {
+            await mongoose.connect(process.env.MONGODB_URI, {
+                serverSelectionTimeoutMS: 30000, // 30 seconds
+                socketTimeoutMS: 45000, // 45 seconds
+                maxPoolSize: 10,
+                retryWrites: true,
+                retryReads: true
+            });
+            console.log('✅ Connected to MongoDB');
+
+            // Handle connection events
+            mongoose.connection.on('error', (error) => {
+                console.error('MongoDB connection error:', error);
+            });
+
+            mongoose.connection.on('disconnected', () => {
+                console.log('MongoDB disconnected');
+            });
+
+            mongoose.connection.on('reconnected', () => {
+                console.log('MongoDB reconnected');
+            });
+
+            return;
+        } catch (error) {
+            retries++;
+            console.error(`❌ MongoDB connection attempt ${retries}/${maxRetries} failed:`, error.message);
+
+            if (retries >= maxRetries) {
+                console.error('❌ Could not connect to MongoDB after maximum retries');
+                process.exit(1);
+            }
+
+            // Wait before retrying (exponential backoff)
+            const delay = Math.min(1000 * Math.pow(2, retries), 10000);
+            console.log(`⏳ Retrying in ${delay}ms...`);
+            await new Promise(resolve => setTimeout(resolve, delay));
+        }
     }
 }
 
@@ -366,7 +402,7 @@ client.on(Events.InteractionCreate, async interaction => {
             const expiredTimestamp = Math.round(expirationTime / 1000);
             return interaction.reply({
                 content: `Please wait, you are on a cooldown for \`${command.data.name}\`. You can use it again <t:${expiredTimestamp}:R>.`,
-                ephemeral: true
+                flags: 64
             });
         }
     }
@@ -386,10 +422,14 @@ client.on(Events.InteractionCreate, async interaction => {
             .setDescription('There was an error while executing this command!')
             .setTimestamp();
 
-        if (interaction.replied || interaction.deferred) {
-            await interaction.followUp({ embeds: [errorEmbed], ephemeral: true });
-        } else {
-            await interaction.reply({ embeds: [errorEmbed], ephemeral: true });
+        try {
+            if (interaction.replied || interaction.deferred) {
+                await interaction.followUp({ embeds: [errorEmbed], flags: 64 });
+            } else {
+                await interaction.reply({ embeds: [errorEmbed], flags: 64 });
+            }
+        } catch (interactionError) {
+            console.error('Failed to respond to interaction:', interactionError);
         }
     }
 });

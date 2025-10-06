@@ -31,21 +31,21 @@ module.exports = {
         if (member && !member.bannable) {
             return interaction.reply({
                 content: '❌ I cannot ban this user. Check my permissions and role hierarchy.',
-                ephemeral: true
+                flags: 64
             });
         }
 
         if (target.id === interaction.user.id) {
             return interaction.reply({
                 content: '❌ You cannot ban yourself!',
-                ephemeral: true
+                flags: 64
             });
         }
 
         if (target.id === interaction.client.user.id) {
             return interaction.reply({
                 content: '❌ I cannot ban myself!',
-                ephemeral: true
+                flags: 64
             });
         }
 
@@ -55,7 +55,7 @@ module.exports = {
             if (existingBan) {
                 return interaction.reply({
                     content: '❌ This user is already banned!',
-                    ephemeral: true
+                    flags: 64
                 });
             }
 
@@ -102,7 +102,7 @@ module.exports = {
             console.error('Error banning user:', error);
             await interaction.reply({
                 content: '❌ An error occurred while banning the user.',
-                ephemeral: true
+                flags: 64
             });
         }
     },

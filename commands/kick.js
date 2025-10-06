@@ -24,28 +24,28 @@ module.exports = {
         if (!member) {
             return interaction.reply({
                 content: '❌ User not found in this server!',
-                ephemeral: true
+                flags: 64
             });
         }
 
         if (!member.kickable) {
             return interaction.reply({
                 content: '❌ I cannot kick this user. Check my permissions and role hierarchy.',
-                ephemeral: true
+                flags: 64
             });
         }
 
         if (member.id === interaction.user.id) {
             return interaction.reply({
                 content: '❌ You cannot kick yourself!',
-                ephemeral: true
+                flags: 64
             });
         }
 
         if (member.id === interaction.client.user.id) {
             return interaction.reply({
                 content: '❌ I cannot kick myself!',
-                ephemeral: true
+                flags: 64
             });
         }
 
@@ -87,7 +87,7 @@ module.exports = {
             console.error('Error kicking user:', error);
             await interaction.reply({
                 content: '❌ An error occurred while kicking the user.',
-                ephemeral: true
+                flags: 64
             });
         }
     },

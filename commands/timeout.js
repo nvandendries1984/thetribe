@@ -30,28 +30,28 @@ module.exports = {
         if (!member) {
             return interaction.reply({
                 content: '❌ User not found in this server!',
-                ephemeral: true
+                flags: 64
             });
         }
 
         if (!member.moderatable) {
             return interaction.reply({
                 content: '❌ I cannot timeout this user. Check my permissions and role hierarchy.',
-                ephemeral: true
+                flags: 64
             });
         }
 
         if (member.id === interaction.user.id) {
             return interaction.reply({
                 content: '❌ You cannot timeout yourself!',
-                ephemeral: true
+                flags: 64
             });
         }
 
         if (member.id === interaction.client.user.id) {
             return interaction.reply({
                 content: '❌ I cannot timeout myself!',
-                ephemeral: true
+                flags: 64
             });
         }
 
@@ -99,7 +99,7 @@ module.exports = {
             console.error('Error timing out user:', error);
             await interaction.reply({
                 content: '❌ An error occurred while timing out the user.',
-                ephemeral: true
+                flags: 64
             });
         }
     },

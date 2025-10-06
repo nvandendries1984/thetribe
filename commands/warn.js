@@ -23,19 +23,22 @@ module.exports = {
         if (target.id === interaction.user.id) {
             return interaction.reply({
                 content: '❌ You cannot warn yourself!',
-                ephemeral: true
+                flags: 64
             });
         }
 
         if (target.bot) {
             return interaction.reply({
                 content: '❌ You cannot warn a bot!',
-                ephemeral: true
+                flags: 64
             });
         }
 
         try {
-            // Save warning to database
+            // Defer reply to prevent timeout
+            await interaction.deferReply();
+
+            // Create database entries
             const warning = new UserWarning({
                 guildId: interaction.guild.id,
                 userId: target.id,
@@ -43,9 +46,6 @@ module.exports = {
                 reason: reason
             });
 
-            await warning.save();
-
-            // Save to moderation log
             const moderationLog = new ModerationLog({
                 guildId: interaction.guild.id,
                 userId: target.id,
@@ -54,14 +54,16 @@ module.exports = {
                 reason: reason
             });
 
-            await moderationLog.save();
-
-            // Get total warnings for this user
-            const totalWarnings = await UserWarning.countDocuments({
-                guildId: interaction.guild.id,
-                userId: target.id,
-                active: true
-            });
+            // Execute database operations in parallel
+            const [savedWarning, savedLog, totalWarnings] = await Promise.all([
+                warning.save(),
+                moderationLog.save(),
+                UserWarning.countDocuments({
+                    guildId: interaction.guild.id,
+                    userId: target.id,
+                    active: true
+                }) + 1 // +1 for the warning we just created
+            ]);
 
             // Try to send DM to user
             try {
@@ -93,14 +95,21 @@ module.exports = {
                 )
                 .setTimestamp();
 
-            await interaction.reply({ embeds: [embed] });
+            await interaction.followUp({ embeds: [embed] });
 
         } catch (error) {
             console.error('Error warning user:', error);
-            await interaction.reply({
+
+            const errorReply = {
                 content: '❌ An error occurred while warning the user.',
-                ephemeral: true
-            });
+                flags: 64
+            };
+
+            if (interaction.deferred) {
+                await interaction.followUp(errorReply);
+            } else {
+                await interaction.reply(errorReply);
+            }
         }
     },
 };

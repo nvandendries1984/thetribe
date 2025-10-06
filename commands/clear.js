@@ -20,7 +20,7 @@ module.exports = {
         const amount = interaction.options.getInteger('amount');
         const target = interaction.options.getUser('target');
 
-        await interaction.deferReply({ ephemeral: true });
+        await interaction.deferReply({ flags: 64 });
 
         try {
             const messages = await interaction.channel.messages.fetch({ limit: amount });
