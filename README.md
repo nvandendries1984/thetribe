@@ -63,18 +63,18 @@ A powerful multi-guild Discord bot with slash commands, automod functionality, a
    ```bash
    # Option 1: Use the startup script
    ./start-docker.sh
-   
+
    # Option 2: Use npm scripts
    npm run docker:up
    ```
-   
+
    **Note:** Commands are automatically deployed when the container starts, so no separate deployment step is needed!
 
 4. **Monitor the bot:**
    ```bash
    # View logs
    npm run docker:logs
-   
+
    # Check status
    docker-compose ps
    ```
@@ -127,7 +127,7 @@ npm run docker:logs
    ```bash
    # For local development, commands are auto-deployed
    npm start
-   
+
    # Or manually deploy commands first (optional)
    npm run deploy-commands && npm start
    ```

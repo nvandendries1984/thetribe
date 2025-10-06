@@ -24,7 +24,7 @@ client.cooldowns = new Collection();
 // Deploy slash commands
 async function deployCommands() {
     const commands = [];
-    
+
     // Grab all the command files from the commands directory
     const commandsPath = path.join(__dirname, 'commands');
     if (fs.existsSync(commandsPath)) {
@@ -113,17 +113,17 @@ if (fs.existsSync(eventsPath)) {
 client.once(Events.ClientReady, async (readyClient) => {
     console.log(`🤖 Bot is online as ${readyClient.user.tag}!`);
     console.log(`📊 Serving ${readyClient.guilds.cache.size} guilds with ${readyClient.users.cache.size} users`);
-    
+
     try {
         // Deploy commands first
         await deployCommands();
-        
+
         // Connect to database
         await connectToDatabase();
-        
+
         // Set bot status
         client.user.setActivity(`${readyClient.guilds.cache.size} servers`, { type: 'WATCHING' });
-        
+
         console.log('🚀 Bot is fully initialized and ready!');
     } catch (error) {
         console.error('❌ Error during bot initialization:', error);
