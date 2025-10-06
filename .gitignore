@@ -1,3 +1,20 @@
+# The Tribe Discord Bot - .gitignore
+#
+# IMPORTANT: The following files SHOULD be committed:
+# - .env.example (template for environment variables)
+# - docker-compose.yml (main Docker configuration)
+# - Dockerfile (container definition)
+# - start-docker.sh (startup script)
+# - All source code files (*.js)
+# - package.json and package-lock.json
+# - README.md
+#
+# NEVER commit:
+# - .env (contains secrets)
+# - node_modules/
+# - logs/
+# - Docker volumes
+
 # Logs
 logs
 *.log
@@ -150,3 +167,139 @@ Desktop.ini
 *.db
 *.sqlite
 *.sqlite3
+
+# Docker
+docker-compose.override.yml
+.docker/
+
+# Docker Compose override files (keep main docker-compose.yml)
+docker-compose.*.yml
+!docker-compose.yml
+
+# Docker volumes and data
+mongodb_data/
+postgres_data/
+
+# Application logs (mounted volumes)
+logs/*.log
+logs/*.txt
+logs/discord-*.log
+
+# Production environment files
+.env.production
+
+# Development environment files
+.env.development
+.env.local
+.env.test
+
+# Bot specific files
+bot.log
+discord.log
+error.log
+
+# PM2 process files
+ecosystem.config.js
+.pm2/
+pm2.json
+
+# Backup files
+*.backup
+*.bak
+*.tmp
+
+# Security files
+*.pem
+*.key
+*.crt
+*.csr
+*.p12
+*.pfx
+
+# MongoDB dumps
+dump/
+*.dump
+
+# Redis dumps
+dump.rdb
+
+# Jest coverage
+coverage/
+.nyc_output
+
+# Testing
+test-results/
+playwright-report/
+test-results.xml
+
+# Build artifacts
+build/
+dist/
+out/
+
+# Temporary files
+temp/
+tmp/
+.temp/
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Editor files
+.vscode/settings.json
+.vscode/launch.json
+.vscode/extensions.json
+*.sublime-project
+*.sublime-workspace
+
+# Local configuration files
+config/local.json
+config/development.json
+config/production.json
+
+# Application specific
+uploads/
+public/uploads/
+storage/
+
+# Monitoring and analytics
+newrelic.js
+.newrelic.yml
+
+# Discord bot specific
+.bot_cache/
+bot_data/
+user_data/
+guild_data/
+
+# Health check files
+healthcheck.log
+health.json
+
+# Process management
+*.pid
+.pm2/
+ecosystem.config.js
+
+# Certificates and keys (if using HTTPS)
+ssl/
+certs/
+*.pem
+*.crt
+*.key
+
+# Application data
+data/
+backups/
+exports/
+
+# Runtime files
+.runtime/
+.cache/
+.storage/

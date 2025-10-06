@@ -49,12 +49,17 @@ A powerful multi-guild Discord bot with slash commands, automod functionality, a
    ```
 
 2. **Environment configuration:**
-   Make sure your `.env` file has the correct values:
+   Copy the example environment file and configure it:
+   ```bash
+   cp .env.example .env
+   ```
+
+   Then edit `.env` with your actual values:
    ```env
    DISCORD_TOKEN=your_bot_token
    DISCORD_CLIENT_ID=your_client_id
    DISCORD_CLIENT_SECRET=your_client_secret
-   MONGODB_URI=mongodb://root:Pasja%402025@mongodb:27017/thetribe?authSource=admin
+   MONGODB_URI=mongodb://root:your_password@localhost:27017/thetribe?authSource=admin
    DB_NAME=thetribe
    NODE_ENV=production
    ```
@@ -113,7 +118,12 @@ npm run docker:logs
    ```
 
 2. **Environment configuration:**
-   Update your `.env` file for local development:
+   Copy the example environment file and configure it for local development:
+   ```bash
+   cp .env.example .env
+   ```
+
+   Then edit `.env` with your actual values:
    ```env
    DISCORD_TOKEN=your_bot_token
    DISCORD_CLIENT_ID=your_client_id
@@ -212,11 +222,12 @@ The Docker setup includes:
 - **bot-network**: Internal Docker network for service communication
 
 ### Features
-- **Health checks**: Automatic container health monitoring
+- **Health checks**: HTTP endpoint for container health monitoring
 - **Persistent data**: MongoDB data is persisted in Docker volumes
 - **Automatic restarts**: Containers restart unless manually stopped
 - **Logs directory**: Bot logs are mounted to `./logs` for easy access
 - **Database initialization**: Automatic database setup with indexes
+- **Portainer compatible**: Health endpoint for container monitoring
 
 ### File Structure
 ```
@@ -238,6 +249,46 @@ The bot uses these environment variables in Docker:
 - `MONGODB_URI`: MongoDB connection string (uses container name `mongodb`)
 - `DB_NAME`: Database name
 - `NODE_ENV`: Set to `production` for Docker
+- `HEALTH_PORT`: Port for health check endpoint (default: 15015)
+
+### Health Monitoring
+
+The bot includes a built-in HTTP health check endpoint for container monitoring:
+
+**Health Check Endpoint:**
+```
+GET http://localhost:15015/health
+```
+
+**Response Example:**
+```json
+{
+  "status": "healthy",
+  "timestamp": "2025-10-06T12:00:00.000Z",
+  "uptime": 3600,
+  "bot": {
+    "ready": true,
+    "guilds": 5,
+    "users": 1247,
+    "ping": 42
+  },
+  "database": {
+    "connected": true,
+    "state": 1
+  },
+  "memory": {
+    "used": 45,
+    "total": 128
+  }
+}
+```
+
+**Status Codes:**
+- `200`: Bot is healthy and operational
+- `503`: Bot is unhealthy (database disconnected or bot not ready)
+
+**Portainer Integration:**
+The health check is compatible with Portainer's container monitoring. Configure your Portainer stack to use the health endpoint for automatic monitoring.
 
 ### Troubleshooting Docker
 

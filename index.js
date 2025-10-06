@@ -2,6 +2,7 @@ const { Client, GatewayIntentBits, Collection, Events, EmbedBuilder, PermissionF
 const mongoose = require('mongoose');
 const fs = require('fs');
 const path = require('path');
+const http = require('http');
 require('dotenv').config();
 
 // Create a new client instance
@@ -72,6 +73,54 @@ async function connectToDatabase() {
     }
 }
 
+// Health check server for Portainer
+function createHealthCheckServer() {
+    const server = http.createServer((req, res) => {
+        if (req.url === '/health' || req.url === '/') {
+            // Check bot status
+            const isReady = client.isReady();
+            const mongoStatus = mongoose.connection.readyState === 1;
+            const uptime = process.uptime();
+            
+            const healthData = {
+                status: isReady && mongoStatus ? 'healthy' : 'unhealthy',
+                timestamp: new Date().toISOString(),
+                uptime: Math.floor(uptime),
+                bot: {
+                    ready: isReady,
+                    guilds: client.guilds ? client.guilds.cache.size : 0,
+                    users: client.users ? client.users.cache.size : 0,
+                    ping: client.ws ? client.ws.ping : -1
+                },
+                database: {
+                    connected: mongoStatus,
+                    state: mongoose.connection.readyState
+                },
+                memory: {
+                    used: Math.round(process.memoryUsage().heapUsed / 1024 / 1024),
+                    total: Math.round(process.memoryUsage().heapTotal / 1024 / 1024)
+                }
+            };
+
+            res.writeHead(isReady && mongoStatus ? 200 : 503, {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            });
+            res.end(JSON.stringify(healthData, null, 2));
+        } else {
+            res.writeHead(404, { 'Content-Type': 'text/plain' });
+            res.end('Not Found');
+        }
+    });
+
+    const port = process.env.HEALTH_PORT || 15015;
+    server.listen(port, '0.0.0.0', () => {
+        console.log(`🏥 Health check server running on port ${port}`);
+    });
+
+    return server;
+}
+
 // Load commands
 
 const commandsPath = path.join(__dirname, 'commands');
@@ -120,6 +169,9 @@ client.once(Events.ClientReady, async (readyClient) => {
 
         // Connect to database
         await connectToDatabase();
+
+        // Start health check server
+        createHealthCheckServer();
 
         // Set bot status
         client.user.setActivity(`${readyClient.guilds.cache.size} servers`, { type: 'WATCHING' });

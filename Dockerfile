@@ -22,7 +22,7 @@ RUN chown -R discord:nodejs /app
 USER discord
 
 # Expose the port (if needed for health checks)
-EXPOSE 3000
+EXPOSE 15015
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
