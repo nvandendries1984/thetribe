@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TheTribe Discord Bot - API Documentation</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="api-docs.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>TheTribe Discord Bot</h1>
+            <p class="subtitle">REST API Documentation</p>
+            <div class="nav-links">
+                <a href="/" class="nav-link"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+                <a href="/api-docs" class="nav-link active"><i class="fas fa-book"></i> API Docs</a>
+            </div>
+        </header>
+
+        <div class="api-container">
+            <!-- Introduction -->
+            <div class="card">
+                <div class="card-header">
+                    <h2><i class="fas fa-info-circle"></i> Introduction</h2>
+                </div>
+                <div class="card-content">
+                    <p>Welcome to the TheTribe Discord Bot REST API. This API allows you to interact with the bot programmatically to retrieve information about guilds, members, moderation logs, and more.</p>
+
+            <div class="base-url-box">
+                <h3><i class="fas fa-globe"></i> Base URL</h3>
+                <div class="url-container">
+                    <code class="base-url">http://188.212.125.248:15016</code>
+                    <span class="url-separator">or</span>
+                    <code class="base-url">https://thetribe.bytebees.dev:15016</code>
+                </div>
+            </div>                    <div class="format-info">
+                        <h3><i class="fas fa-code"></i> Response Format</h3>
+                        <p>All API responses are in JSON format. Error responses include:</p>
+                        <div class="code-block">
+                            <pre>{
+  "error": true,
+  "message": "Error description",
+  "code": 404
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Status & Information -->
+            <div class="card">
+                <div class="card-header">
+                    <h2><i class="fas fa-chart-line"></i> Status & Information</h2>
+                </div>
+                <div class="card-content">
+                    <div class="endpoint">
+                        <div class="endpoint-header">
+                            <span class="method get">GET</span>
+                            <span class="endpoint-url">/api/status</span>
+                        </div>
+                        <p class="endpoint-description">Get bot status information including uptime, guilds, users, and system metrics.</p>
+                        <div class="code-block">
+                            <pre>{
+  "status": "online",
+  "timestamp": "2025-10-06T10:00:00.000Z",
+  "bot": {
+    "ready": true,
+    "guildCount": 5,
+    "userCount": 1250,
+    "ping": 45
+  },
+  "database": {
+    "connected": true,
+    "readyState": 1
+  },
+  "system": {
+    "uptime": 3600,
+    "memory": {
+      "used": 28261856,
+      "total": 31023104
+    }
+  }
+}</pre>
+                        </div>
+                    </div>
+
+                    <div class="endpoint">
+                        <div class="endpoint-header">
+                            <span class="method get">GET</span>
+                            <span class="endpoint-url">/api/stats</span>
+                        </div>
+                        <p class="endpoint-description">Get detailed bot statistics including command usage and moderation metrics.</p>
+                        <div class="code-block">
+                            <pre>{
+  "totalWarnings": 45,
+  "totalBans": 12,
+  "totalKicks": 8,
+  "totalTimeouts": 23,
+  "guilds": 5,
+  "users": 1250,
+  "uptime": "2d 4h 15m"
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Guild Management -->
+            <div class="card">
+                <div class="card-header">
+                    <h2><i class="fas fa-server"></i> Guild Management</h2>
+                </div>
+                <div class="card-content">
+                    <div class="endpoint">
+                        <div class="endpoint-header">
+                            <span class="method get">GET</span>
+                            <span class="endpoint-url">/api/guilds</span>
+                        </div>
+                        <p class="endpoint-description">Get list of all guilds the bot is in.</p>
+                        <div class="code-block">
+                            <pre>[
+  {
+    "id": "123456789012345678",
+    "name": "My Discord Server",
+    "memberCount": 250,
+    "owner": false,
+    "permissions": ["ADMINISTRATOR"]
+  }
+]</pre>
+                        </div>
+                    </div>
+
+                    <div class="endpoint">
+                        <div class="endpoint-header">
+                            <span class="method get">GET</span>
+                            <span class="endpoint-url">/api/guilds/{guildId}</span>
+                        </div>
+                        <p class="endpoint-description">Get detailed information about a specific guild.</p>
+                        <div class="params-box">
+                            <h4><i class="fas fa-cog"></i> Parameters</h4>
+                            <div class="param">
+                                <code>guildId</code> - Discord Guild ID
+                            </div>
+                        </div>
+                        <div class="code-block">
+                            <pre>{
+  "id": "123456789012345678",
+  "name": "My Discord Server",
+  "description": "A great Discord server",
+  "memberCount": 250,
+  "owner": {
+    "id": "987654321098765432",
+    "username": "ServerOwner",
+    "avatar": "avatar_hash"
+  },
+  "channels": 15,
+  "roles": 8,
+  "createdAt": "2023-01-15T10:30:00.000Z"
+}</pre>
+                        </div>
+                    </div>
+
+                    <div class="endpoint">
+                        <div class="endpoint-header">
+                            <span class="method get">GET</span>
+                            <span class="endpoint-url">/api/guilds/{guildId}/members</span>
+                        </div>
+                        <p class="endpoint-description">Get list of members in a guild.</p>
+                        <div class="params-box">
+                            <h4><i class="fas fa-cog"></i> Parameters</h4>
+                            <div class="param">
+                                <code>guildId</code> - Discord Guild ID
+                            </div>
+                            <h4><i class="fas fa-question-circle"></i> Query Parameters</h4>
+                            <div class="param">
+                                <code>limit</code> - Number of members to return (default: 50, max: 1000)
+                            </div>
+                            <div class="param">
+                                <code>after</code> - User ID to start after (for pagination)
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="endpoint">
+                        <div class="endpoint-header">
+                            <span class="method get">GET</span>
+                            <span class="endpoint-url">/api/guilds/{guildId}/members/{userId}</span>
+                        </div>
+                        <p class="endpoint-description">Get detailed information about a specific guild member.</p>
+                        <div class="params-box">
+                            <h4><i class="fas fa-cog"></i> Parameters</h4>
+                            <div class="param">
+                                <code>guildId</code> - Discord Guild ID
+                            </div>
+                            <div class="param">
+                                <code>userId</code> - Discord User ID
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Commands -->
+            <div class="card">
+                <div class="card-header">
+                    <h2><i class="fas fa-bolt"></i> Commands</h2>
+                </div>
+                <div class="card-content">
+                    <div class="endpoint">
+                        <div class="endpoint-header">
+                            <span class="method get">GET</span>
+                            <span class="endpoint-url">/api/commands</span>
+                        </div>
+                        <p class="endpoint-description">Get list of all available bot commands.</p>
+                        <div class="code-block">
+                            <pre>[
+  {
+    "name": "ping",
+    "description": "Check bot latency",
+    "category": "utility"
+  },
+  {
+    "name": "ban",
+    "description": "Ban a member from the server",
+    "category": "moderation"
+  }
+]</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Moderation -->
+            <div class="card">
+                <div class="card-header">
+                    <h2><i class="fas fa-shield-alt"></i> Moderation</h2>
+                </div>
+                <div class="card-content">
+                    <div class="endpoint">
+                        <div class="endpoint-header">
+                            <span class="method get">GET</span>
+                            <span class="endpoint-url">/api/warnings</span>
+                        </div>
+                        <p class="endpoint-description">Get list of all warnings across all guilds.</p>
+                        <div class="params-box">
+                            <h4><i class="fas fa-question-circle"></i> Query Parameters</h4>
+                            <div class="param">
+                                <code>guild</code> - Filter by Guild ID
+                            </div>
+                            <div class="param">
+                                <code>user</code> - Filter by User ID
+                            </div>
+                            <div class="param">
+                                <code>limit</code> - Number of warnings to return (default: 50)
+                            </div>
+                            <div class="param">
+                                <code>skip</code> - Number of warnings to skip (pagination)
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="endpoint">
+                        <div class="endpoint-header">
+                            <span class="method get">GET</span>
+                            <span class="endpoint-url">/api/warnings/{userId}</span>
+                        </div>
+                        <p class="endpoint-description">Get all warnings for a specific user.</p>
+                        <div class="params-box">
+                            <h4><i class="fas fa-cog"></i> Parameters</h4>
+                            <div class="param">
+                                <code>userId</code> - Discord User ID
+                            </div>
+                            <h4><i class="fas fa-question-circle"></i> Query Parameters</h4>
+                            <div class="param">
+                                <code>guild</code> - Filter by Guild ID
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="endpoint">
+                        <div class="endpoint-header">
+                            <span class="method get">GET</span>
+                            <span class="endpoint-url">/api/modlogs</span>
+                        </div>
+                        <p class="endpoint-description">Get moderation logs.</p>
+                        <div class="params-box">
+                            <h4><i class="fas fa-question-circle"></i> Query Parameters</h4>
+                            <div class="param">
+                                <code>guild</code> - Filter by Guild ID
+                            </div>
+                            <div class="param">
+                                <code>action</code> - Filter by action type (ban, kick, timeout, warn)
+                            </div>
+                            <div class="param">
+                                <code>moderator</code> - Filter by Moderator ID
+                            </div>
+                            <div class="param">
+                                <code>limit</code> - Number of logs to return (default: 50)
+                            </div>
+                            <div class="param">
+                                <code>skip</code> - Number of logs to skip (pagination)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Authentication & Rate Limiting -->
+            <div class="card">
+                <div class="card-header">
+                    <h2><i class="fas fa-lock"></i> Authentication & Limits</h2>
+                </div>
+                <div class="card-content">
+                    <div class="info-section">
+                        <h3><i class="fas fa-key"></i> Authentication</h3>
+                        <p>Currently, this API does not require authentication. In production environments, consider implementing API keys or OAuth2 for security.</p>
+                    </div>
+
+                    <div class="info-section">
+                        <h3><i class="fas fa-tachometer-alt"></i> Rate Limiting</h3>
+                        <p>Currently no rate limiting is implemented. For production use, consider implementing rate limiting to prevent abuse.</p>
+                    </div>
+
+                    <div class="info-section">
+                        <h3><i class="fas fa-exclamation-triangle"></i> CORS</h3>
+                        <p>CORS is enabled for all origins (*). This allows web applications to make requests to the API from any domain.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>© 2025 TheTribe Discord Bot | <a href="https://github.com/nvandendries1984/thetribe" target="_blank">GitHub</a></p>
+            <p class="api-info">API Version 1.0 | Base URL: http://188.212.125.248:15016 or https://thetribe.bytebees.dev:15016</p>
+        </footer>
+    </div>
+</body>
+</html>

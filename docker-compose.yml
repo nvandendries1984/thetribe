@@ -11,6 +11,7 @@ services:
       - ./logs:/app/logs
     ports:
       - "15015:15015"
+      - "15016:15016"
     networks:
       - proxy-network
 

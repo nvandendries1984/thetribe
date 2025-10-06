@@ -120,8 +120,12 @@ function createHealthCheckServer() {
 
             if (req.url === '/' || req.url === '/index.html') {
                 filePath = path.join(webPath, 'index.html');
+            } else if (req.url === '/api-docs' || req.url === '/api-docs.html') {
+                filePath = path.join(webPath, 'api-docs.html');
             } else if (req.url === '/style.css') {
                 filePath = path.join(webPath, 'style.css');
+            } else if (req.url === '/api-docs.css') {
+                filePath = path.join(webPath, 'api-docs.css');
             } else if (req.url === '/script.js') {
                 filePath = path.join(webPath, 'script.js');
             } else {
@@ -222,6 +226,11 @@ client.once(Events.ClientReady, async (readyClient) => {
 
         // Start health check server
         createHealthCheckServer();
+
+        // Start API server
+        const APIServer = require('./api/APIServer');
+        const apiServer = new APIServer(client, 15016);
+        apiServer.start();
 
         // Set bot status
         client.user.setActivity(`${readyClient.guilds.cache.size} servers`, { type: 'WATCHING' });
