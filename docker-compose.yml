@@ -1,89 +1,12 @@
-# TheTribe Docker Compose for Nginx Proxy Manager
-
 services:
-  # MongoDB Database
-  mongodb:
-    image: mongo:7.0
-    container_name: thetribe-mongodb
+  discord-bot:
+    build: .
+    container_name: thetribe-discord-bot
     restart: unless-stopped
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: admin
-      MONGO_INITDB_ROOT_PASSWORD: password
-      MONGO_INITDB_DATABASE: thetribe
-    volumes:
-      - mongodb_data:/data/db
-    healthcheck:
-      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 30s
-    networks:
-      - proxy-network
-
-  # Discord Bot
-  bot:
-    build:
-      context: .
-      dockerfile: bot/Dockerfile
-    container_name: thetribe-bot
-    restart: unless-stopped
-    depends_on:
-      mongodb:
-        condition: service_healthy
     environment:
       - NODE_ENV=production
-      - MONGODB_URI=mongodb://admin:password@mongodb:27017/thetribe?authSource=admin
-      - DISCORD_TOKEN=${DISCORD_TOKEN}
+    env_file:
+      - .env
     volumes:
       - ./logs:/app/logs
-    networks:
-      - proxy-network
-
-  # Backend API
-  backend:
-    build:
-      context: .
-      dockerfile: backend/Dockerfile
-    container_name: thetribe-backend
-    restart: unless-stopped
-    expose:
-      - "5001"
-    depends_on:
-      mongodb:
-        condition: service_healthy
-    environment:
-      - NODE_ENV=production
-      - PORT=5001
-      - MONGODB_URI=mongodb://admin:password@mongodb:27017/thetribe?authSource=admin
-      - FRONTEND_URL=https://thetribe.bytebees.dev
-      - BACKEND_URL=https://thetribe.bytebees.dev
-      - SESSION_SECRET=${SESSION_SECRET}
-      - DISCORD_CLIENT_ID=${DISCORD_CLIENT_ID}
-      - DISCORD_CLIENT_SECRET=${DISCORD_CLIENT_SECRET}
-    networks:
-      - proxy-network
-
-  # Frontend Dashboard
-  frontend:
-    build:
-      context: .
-      dockerfile: frontend/Dockerfile
-    container_name: thetribe-frontend
-    restart: unless-stopped
-    expose:
-      - "3001"
-    depends_on:
-      - backend
-    environment:
-      - NODE_ENV=production
-      - BACKEND_URL=http://thetribe-backend:5001
-    networks:
-      - proxy-network
-
-volumes:
-  mongodb_data:
-
-networks:
-  proxy-network:
-    external: true
+    network_mode: "host"
