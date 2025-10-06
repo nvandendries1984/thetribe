@@ -81,7 +81,7 @@ function createHealthCheckServer() {
             const isReady = client.isReady();
             const mongoStatus = mongoose.connection.readyState === 1;
             const uptime = process.uptime();
-            
+
             const healthData = {
                 status: isReady && mongoStatus ? 'healthy' : 'unhealthy',
                 timestamp: new Date().toISOString(),

@@ -3,7 +3,7 @@ const http = require('http');
 
 async function healthCheck() {
     const port = process.env.HEALTH_PORT || 15015;
-    
+
     const options = {
         hostname: 'localhost',
         port: port,
@@ -14,11 +14,11 @@ async function healthCheck() {
 
     const req = http.request(options, (res) => {
         let data = '';
-  
+
         res.on('data', (chunk) => {
             data += chunk;
         });
-  
+
         res.on('end', () => {
             try {
                 const healthData = JSON.parse(data);
