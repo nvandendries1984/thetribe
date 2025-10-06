@@ -19,6 +19,7 @@ module.exports = {
         const generalCommands = [];
         const moderationCommands = [];
         const automodCommands = [];
+        const aiCommands = [];
 
         commands.forEach(command => {
             const commandName = `\`/${command.data.name}\``;
@@ -31,6 +32,8 @@ module.exports = {
                 moderationCommands.push(`${commandName} - ${commandDesc}`);
             } else if (command.data.name.includes('automod')) {
                 automodCommands.push(`${commandName} - ${commandDesc}`);
+            } else if (command.data.name.includes('ai')) {
+                aiCommands.push(`${commandName} - ${commandDesc}`);
             } else {
                 generalCommands.push(`${commandName} - ${commandDesc}`);
             }
@@ -60,7 +63,16 @@ module.exports = {
             });
         }
 
+        if (aiCommands.length > 0) {
+            embed.addFields({
+                name: '🧠 AI Commands',
+                value: aiCommands.join('\n'),
+                inline: false
+            });
+        }
+
         embed.addFields(
+            { name: '💡 AI Assistant', value: 'You can also mention me (@TheTribe) with a question to get an AI response!', inline: false },
             { name: 'ℹ️ More info?', value: 'Use `/info bot` for more information about the bot.', inline: false }
         );
 

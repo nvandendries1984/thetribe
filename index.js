@@ -3,7 +3,13 @@ const mongoose = require('mongoose');
 const fs = require('fs');
 const path = require('path');
 const http = require('http');
+// const OpenAI = require('openai'); // TEMPORARILY DISABLED
 require('dotenv').config();
+
+// Initialize OpenAI - TEMPORARILY DISABLED
+// const openai = new OpenAI({
+//     apiKey: process.env.OPENAI_API_KEY,
+// });
 
 // Create a new client instance
 const client = new Client({
@@ -240,7 +246,97 @@ client.once(Events.ClientReady, async (readyClient) => {
         console.error('❌ Error during bot initialization:', error);
         process.exit(1);
     }
-});// Interaction handling
+});
+
+// AI Response handler for mentions - TEMPORARILY DISABLED
+// Uncomment the code below to re-enable AI responses via mentions
+/*
+client.on(Events.MessageCreate, async message => {
+    // Ignore messages from bots
+    if (message.author.bot) return;
+
+    // Check if the bot is mentioned
+    if (message.mentions.has(client.user)) {
+        // Remove the mention from the message to get the actual question
+        const question = message.content.replace(/<@!?\d+>/g, '').trim();
+
+        // If there's no question after removing mentions, ignore
+        if (!question) return;
+
+        try {
+            // Show typing indicator
+            await message.channel.sendTyping();
+
+            // Generate AI response using OpenAI
+            const completion = await openai.chat.completions.create({
+                model: "gpt-3.5-turbo",
+                messages: [
+                    {
+                        role: "system",
+                        content: "You are TheTribe Discord bot, a helpful assistant for The Tribe community. Be friendly, helpful, and concise in your responses. Keep responses under 2000 characters to fit Discord's message limit."
+                    },
+                    {
+                        role: "user",
+                        content: question
+                    }
+                ],
+                max_tokens: 500,
+                temperature: 0.7,
+            });
+
+            const aiResponse = completion.choices[0].message.content;
+
+            // Create embed for the response
+            const responseEmbed = new EmbedBuilder()
+                .setColor('#00D4AA')
+                .setAuthor({
+                    name: 'TheTribe AI Assistant',
+                    iconURL: client.user.displayAvatarURL()
+                })
+                .setDescription(aiResponse)
+                .setFooter({
+                    text: `Asked by ${message.author.username}`,
+                    iconURL: message.author.displayAvatarURL()
+                })
+                .setTimestamp();
+
+            // Reply to the message
+            await message.reply({ embeds: [responseEmbed] });
+
+        } catch (error) {
+            console.error('❌ Error generating AI response:', error);
+
+            let errorMessage = 'Sorry, I encountered an error while processing your question. Please try again later.';
+            let errorTitle = '❌ AI Error';
+
+            // Handle specific OpenAI errors
+            if (error.status === 429) {
+                errorTitle = '💳 Quota Exceeded';
+                errorMessage = 'Sorry, the AI service is currently unavailable due to quota limits. Please contact the bot administrator to check the OpenAI billing settings.';
+            } else if (error.status === 401) {
+                errorTitle = '🔑 Authentication Error';
+                errorMessage = 'AI service authentication failed. Please contact the bot administrator.';
+            } else if (error.status === 500) {
+                errorTitle = '🔧 Service Unavailable';
+                errorMessage = 'OpenAI service is temporarily unavailable. Please try again in a few minutes.';
+            }
+
+            const errorEmbed = new EmbedBuilder()
+                .setColor('#FF0000')
+                .setTitle(errorTitle)
+                .setDescription(errorMessage)
+                .addFields(
+                    { name: '💡 Tip', value: 'You can still use all other bot commands normally!', inline: false }
+                )
+                .setTimestamp();
+
+            await message.reply({ embeds: [errorEmbed] });
+        }
+    }
+});
+*/
+
+// Interaction handling
 client.on(Events.InteractionCreate, async interaction => {
     if (!interaction.isChatInputCommand()) return;
 
