@@ -9,4 +9,11 @@ services:
       - .env
     volumes:
       - ./logs:/app/logs
-    network_mode: "host"
+    ports:
+      - "15015:15015"
+    networks:
+      - proxy-network
+
+networks:
+  proxy-network:
+    external: true

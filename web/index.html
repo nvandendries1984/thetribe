@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TheTribe Discord Bot - Status Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>TheTribe Discord Bot</h1>
+            <p class="subtitle">Multi-Guild Discord Bot Dashboard</p>
+        </header>
+
+        <div class="status-container">
+            <div class="status-badge" id="statusBadge">
+                <span class="status-dot" id="statusDot"></span>
+                <span id="statusText">Loading...</span>
+            </div>
+            <div class="last-updated" id="lastUpdated">Last updated: Never</div>
+        </div>
+
+        <div class="dashboard">
+            <!-- Bot Status Card -->
+            <div class="card">
+                <div class="card-header">
+                    <h2><i class="fas fa-robot"></i> Bot Status</h2>
+                </div>
+                <div class="card-content">
+                    <div class="stat">
+                        <span class="stat-label">Status:</span>
+                        <span class="stat-value" id="botReady">-</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-label">Servers:</span>
+                        <span class="stat-value" id="guildCount">-</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-label">Users:</span>
+                        <span class="stat-value" id="userCount">-</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-label">Ping:</span>
+                        <span class="stat-value" id="botPing">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- System Info Card -->
+            <div class="card">
+                <div class="card-header">
+                    <h2><i class="fas fa-cog"></i> System Info</h2>
+                </div>
+                <div class="card-content">
+                    <div class="stat">
+                        <span class="stat-label">Uptime:</span>
+                        <span class="stat-value" id="uptime">-</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-label">Memory Used:</span>
+                        <span class="stat-value" id="memoryUsed">-</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-label">Memory Total:</span>
+                        <span class="stat-value" id="memoryTotal">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Database Status Card -->
+            <div class="card">
+                <div class="card-header">
+                    <h2><i class="fas fa-database"></i> Database</h2>
+                </div>
+                <div class="card-content">
+                    <div class="stat">
+                        <span class="stat-label">Status:</span>
+                        <span class="stat-value" id="dbStatus">-</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-label">Connection State:</span>
+                        <span class="stat-value" id="dbState">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Features Card -->
+            <div class="card">
+                <div class="card-header">
+                    <h2><i class="fas fa-tools"></i> Features</h2>
+                </div>
+                <div class="card-content">
+                    <div class="feature">
+                        <span class="feature-icon"><i class="fas fa-shield-alt"></i></span>
+                        <span class="feature-text">Moderation Commands</span>
+                    </div>
+                    <div class="feature">
+                        <span class="feature-icon"><i class="fas fa-robot"></i></span>
+                        <span class="feature-text">AutoMod Protection</span>
+                    </div>
+                    <div class="feature">
+                        <span class="feature-icon"><i class="fas fa-chart-bar"></i></span>
+                        <span class="feature-text">Multi-Guild Support</span>
+                    </div>
+                    <div class="feature">
+                        <span class="feature-icon"><i class="fas fa-database"></i></span>
+                        <span class="feature-text">MongoDB Integration</span>
+                    </div>
+                    <div class="feature">
+                        <span class="feature-icon"><i class="fab fa-docker"></i></span>
+                        <span class="feature-text">Docker Containerized</span>
+                    </div>
+                    <div class="feature">
+                        <span class="feature-icon"><i class="fas fa-bolt"></i></span>
+                        <span class="feature-text">Slash Commands</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>© 2025 TheTribe Discord Bot | <a href="https://github.com/nvandendries1984/thetribe" target="_blank">GitHub</a></p>
+            <p class="auto-refresh">Auto-refreshing every 30 seconds</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
